@@ -1,19 +1,21 @@
 pipeline {
-	agent {
-		docker {
-			image 'composer:latest'
-		}
-	}
+	agent any
 	stages {
-		stage('Build') {
+		stage('Checkout SCM') {
 			steps {
-				sh 'composer install'
+				git 'https://github.com/DanialAshidiq/loginTemplate.git'
 			}
 		}
-		stage('Test') {
+
+		stage('OWASP DependencyCheck') {
 			steps {
-                sh './vendor/bin/phpunit --log-junit logs/unitreport.xml -c tests/phpunit.xml tests'
-            }
+				dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'Default'
+			}
+		}
+	}	
+	post {
+		success {
+			dependencyCheckPublisher pattern: 'dependency-check-report.xml'
 		}
 	}
 }
