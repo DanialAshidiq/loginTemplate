@@ -11,11 +11,11 @@ def index():
         username = request.form['username']
         password = request.form['password']
 
-        if username == "admin" and password == "admin":
+        if username == "Danial" and password == "danial":
             return render_template("home.html")
         
         else:
-            msg = "Wrong credentials !"
+            msg = "Error, invalid password !"
 
     return render_template("index.html", msg=msg)
 
